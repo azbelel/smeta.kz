@@ -11,10 +11,8 @@ class File extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = [
-        'title',
-        'overview',
-        'price'
+    protected $fillable =[
+        'filename'
     ];
 
     public function user()

@@ -23,8 +23,9 @@
                             <div class="form-group row mb-0">
                                 <div class="col-md-8 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Get Offer') }}
+                                        {{ __('Проверка') }}
                                     </button>
+                                    <input type="hidden" name="file_toParse" id="file_toParse" value="">
                                 </div>
                             </div>
                         </form>
@@ -44,8 +45,11 @@
                 url: "{{ route('upload') }}",
                 headers: {
                     'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-                }
+                },
             });
+            drop.on("success", function(file, response) {
+                $('#file_toParse').val(response.filename);
+            })
         });
     </script>
 @endsection

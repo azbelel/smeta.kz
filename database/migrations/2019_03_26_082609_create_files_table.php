@@ -16,9 +16,7 @@ class CreateFilesTable extends Migration
         Schema::create('files', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index();
-            $table->string('title');
-            $table->text('overview');
-            $table->decimal('price', 6, 2);
+            $table->string('filename');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('user_id')
