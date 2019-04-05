@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Prices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Upload;
@@ -30,7 +31,11 @@ class FileController extends Controller
         foreach ($pages as $page) {
             $text .= $page->getText();
         }
-        return $text;
+        $price="";
+        foreach ((explode("\n", $text)) as $line){
+            $price= Prices::whereRaw(" '".$line."' % \"priceKZT\"")->get();
+        }
+        dd($price);
         auth()->user()->files()->create([
             'filename'=>$request->get('file_toParse')
         ]);

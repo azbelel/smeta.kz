@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6539acefacd6d7a5726c878f3d97b67",
+    "content-hash": "0487c24c7b85ec7e06e104eba97d5d74",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -2753,6 +2753,51 @@
             "time": "2018-10-16T17:24:05+00:00"
         },
         {
+            "name": "thiagoalessio/tesseract_ocr",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thiagoalessio/tesseract-ocr-for-php.git",
+                "reference": "b369b5496b6e809d012aacf06cbf2db5f6b29f76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thiagoalessio/tesseract-ocr-for-php/zipball/b369b5496b6e809d012aacf06cbf2db5f6b29f76",
+                "reference": "b369b5496b6e809d012aacf06cbf2db5f6b29f76",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.4 || ^7.0"
+            },
+            "require-dev": {
+                "codacy/coverage": "dev-master",
+                "phpunit/php-code-coverage": "^2.2.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "thiagoalessio\\TesseractOCR\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "thiagoalessio",
+                    "email": "thiagoalessio@me.com"
+                }
+            ],
+            "description": "A wrapper to work with Tesseract OCR inside PHP.",
+            "keywords": [
+                "OCR",
+                "Tesseract",
+                "text recognition"
+            ],
+            "time": "2019-01-30T19:47:33+00:00"
+        },
+        {
             "name": "tijsverkoyen/css-to-inline-styles",
             "version": "2.2.1",
             "source": {
@@ -4619,7 +4664,8 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "laravel/telescope": 20,
-        "smalot/pdfparser": 20
+        "smalot/pdfparser": 20,
+        "thiagoalessio/tesseract_ocr": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
