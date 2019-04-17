@@ -20,6 +20,12 @@
                                     <div id="file" class="dropzone"></div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="pages" class="col-sm-4 col-form-label text-md-right">{{__('Номера страниц')}}</label>
+                                <input type="radio" class="" name="pages" value="0" checked>Все</input>
+                                <input type="radio" class="" name="pages" value="1">Номер</input>
+                                 c <input type="text" class="" size="2" maxlength="2" disabled> по <input type="text" class="" size="2" maxlength="2" disabled>
+                            </div>
                             <div class="form-group row mb-0">
                                 <div class="col-md-8 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
@@ -49,7 +55,8 @@
             });
             drop.on("success", function(file, response) {
                 $('#file_toParse').val(response.filename);
-            })
+            });
+
         });
     </script>
 @endsection

@@ -22,8 +22,8 @@ class FileController extends Controller
         if (!$filename || !file_exists($filename)) {
             return back()->with('message', 'Your file is Not submitted Successfully');
         }
-
-        exec("\"C:\Program Files\gs\gs9.26\bin\gswin64c.exe\" -dSAFER -sDEVICE=png16m -dINTERPOLATE -dNumRenderingThreads=8 -r400 -o ".pathinfo($filename,PATHINFO_DIRNAME)."/".pathinfo($filename,PATHINFO_FILENAME)."%d.png -c 30000000 setvmthreshold -f ".$filename);
+//        return '\"C:\Program Files\gs\gs9.27\bin\gswin64c.exe\" -dSAFER -sDEVICE=png16m -dINTERPOLATE -dNumRenderingThreads=8 -r400 -o \"'.pathinfo($filename,PATHINFO_DIRNAME)."/".pathinfo($filename,PATHINFO_FILENAME).'%d.png\" -c 30000000 setvmthreshold -f '.'\"'.$filename.'\"';
+        exec('"C:\Program Files\gs\gs9.27\bin\gswin64c.exe" -dSAFER -sDEVICE=png16m -dINTERPOLATE -dNumRenderingThreads=8 -r400 -o "'.pathinfo($filename,PATHINFO_DIRNAME)."/".pathinfo($filename,PATHINFO_FILENAME).'%d.png" -c 30000000 setvmthreshold -f '.'"'.$filename.'"');
 //            $gs=new Ghostscript();
 //            Ghostscript::setGsPath('C:\Program Files\gs\gs9.26\bin\gswin64c.exe');
 //            $gs->setDevice('png')
@@ -44,14 +44,19 @@ class FileController extends Controller
                 ->run();
             unlink($file);
         }
-        foreach ((explode("\n", $text)) as $line){
-            $price= Prices::whereRaw(" '".$line."' % \"priceKZT\"")->get();
+        $text=preg_replace("/(\s|\r|\n){2,}/","\n",$text);
+//        get three_or_more char contains lines from $text
+        $text = preg_replace('/^.{0,2}$[\r\n]*/m', '', $text);
+        dd($text);
+        foreach ((explode("\n", $text)) as $line)
+        {
+            $price= Prices::whereRaw(" '".$line."' % \"pricekzt\"")->get();
         }
-        dd($price);
         auth()->user()->files()->create([
             'filename'=>$request->get('file_toParse')
         ]);
 
+        return view('');
         return back()->with('message', 'Your file is submitted Successfully');
     }
 
