@@ -2,22 +2,32 @@
 
 @section('content')
     <div class="container">
-        <h3>Laravel Ajax Request using X-editable bootstrap Plugin Example</h3>
-        <table class="table table-bordered">
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th width="100px">Action</th>
-            </tr>
+        <div class="row justify-content-center">
+            <div class="row col-md-12">
+                @if(session()->get('message'))
+                    <div class="alert alert-success">
+                        {{ session()->get('message') }}
+                    </div>
+                @endif
+                <div class="row col-md-12">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Данные из загруженного файла</th>
+                            <th>Данные из прайса</th>
+                            <th width="100px">Действие</th>
+                        </tr>
 
-            @foreach($users as $user)
-                <tr>
-                    <td><a href="" class="update" data-name="name" data-type="text" data-pk="{{ $user->id }}" data-title="Enter name">{{ $user->name }}</a></td>
-                    <td><a href="" class="update" data-name="email" data-type="email" data-pk="{{ $user->id }}" data-title="Enter email">{{ $user->email }}</a></td>
-                    <td><button class="btn btn-danger btn-sm">Delete</button></td>
-                </tr>
-            @endforeach
-        </table>
+                        @foreach($recognitionData as $line)
+                            <tr>
+                                <td><a href="" class="update" data-name="name" data-type="text" data-pk="{{ $line }}" data-title="Enter name">{{ $line }}</a></td>
+                                <td><a href="" class="update" data-name="email" data-type="email" data-pk="{{ $line }}" data-title="Enter email">{{ $line }}</a></td>
+                                <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 

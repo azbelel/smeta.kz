@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Prices;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Upload;
@@ -38,17 +39,40 @@ class FileController extends Controller
         $text=preg_replace("/(\s|\r|\n){2,}/","\n",$text);
 //        get three_or_more char contains lines from $text
         $text = preg_replace('/^.{0,2}$[\r\n]*/m', '', $text);
+        $recognitionData=explode("\n", $text);
 
-        foreach ((explode("\n", $text)) as $line)
-        {
-            $price= Prices::whereRaw(" '".$line."' % \"pricekzt\"")->get();
-        }
+        return view('table_corrector',compact('recognitionData'));
+
         auth()->user()->files()->create([
             'filename'=>$request->get('file_toParse')
         ]);
 
         return view('');
         return back()->with('message', 'Your file is submitted Successfully');
+    }
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+
+    public function getUsers()
+    {
+        $users = User::all();
+
+    }
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+
+    public function updateUser(Request $request)
+    {
+        User::find($request->pk)->update([$request->name => $request->value]);
+        return response()->json(['success'=>'done']);
     }
 
     public function upload(Request $request)

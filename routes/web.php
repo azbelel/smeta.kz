@@ -23,6 +23,6 @@ Route::post('file/upload', 'FileController@parse')->name('file.upload');
 
 Route::post('upload', 'FileController@upload')->name('upload');
 
-Route::get('/get-users', 'HomeController@getUsers');
+Route::get('/get-users', 'FileController@getUsers');
 
-Route::post('/update-user', 'HomeController@updateUser');
+Route::post('/update-user', 'FileController@updateUser');
