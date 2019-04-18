@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f75e0bad90888fb85581a2d9448aaea0",
+    "content-hash": "a97d3114c45bde0242df192a6c6dece2",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -1114,44 +1114,6 @@
                 "serialize"
             ],
             "time": "2019-02-22T10:30:00+00:00"
-        },
-        {
-            "name": "org_heigl/ghostscript",
-            "version": "2.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/heiglandreas/Org_Heigl_Ghostscript.git",
-                "reference": "2bcd115f047589c28243a66e6bbea993fc91da21"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/heiglandreas/Org_Heigl_Ghostscript/zipball/2bcd115f047589c28243a66e6bbea993fc91da21",
-                "reference": "2bcd115f047589c28243a66e6bbea993fc91da21",
-                "shasum": ""
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.0",
-                "phpdocumentor/phpdocumentor": "^2.9",
-                "phpunit/phpunit": "^5.5||^6.0||^7.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Org_Heigl\\Ghostscript\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Andreas Heigl",
-                    "email": "andreas@heigl.org"
-                }
-            ],
-            "description": "A PHP-Wrapper around the Ghostscript-CLI",
-            "time": "2018-02-22T08:37:21+00:00"
         },
         {
             "name": "paragonie/random_compat",

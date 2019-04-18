@@ -22,3 +22,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::post('file/upload', 'FileController@parse')->name('file.upload');
 
 Route::post('upload', 'FileController@upload')->name('upload');
+
+Route::get('/get-users', 'HomeController@getUsers');
+
+Route::post('/update-user', 'HomeController@updateUser');

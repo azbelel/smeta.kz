@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -24,5 +25,29 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+
+    public function getUsers()
+    {
+        $users = User::all();
+        return view('users',compact('users'));
+    }
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+
+    public function updateUser(Request $request)
+    {
+        User::find($request->pk)->update([$request->name => $request->value]);
+        return response()->json(['success'=>'done']);
     }
 }
