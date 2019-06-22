@@ -19,8 +19,9 @@
 
                         @foreach($recognitionData as $line)
                             <tr>
-                                <td><a href="" class="update" data-name="name" data-type="text" data-pk="{{ $line }}" data-title="Enter name">{{ $line }}</a></td>
-                                <td><a href="" class="update" data-name="email" data-type="email" data-pk="{{ $line }}" data-title="Enter email">{{ $line }}</a></td>
+                                @foreach($line as $cell)
+                                    <td><a href="" class="update" data-name="name" data-type="text" data-pk="{{ $cell }}" data-title="Enter name">{{ $cell }}</a></td>
+                                @endforeach
                                 <td><button class="btn btn-danger btn-sm">Delete</button></td>
                             </tr>
                         @endforeach

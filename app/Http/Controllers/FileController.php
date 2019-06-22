@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\File;
 use App\Imports\ProductsImport;
 use App\Prices;
+use App\TmpPrices;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -26,7 +27,7 @@ class FileController extends Controller
         ]);
 
 
-        $filename = Storage::disk('local')->getDriver()->getAdapter()->applyPathPrefix('files/'.$request->get('file_toParse'));
+        $filename = Storage::disk('public')->getDriver()->getAdapter()->applyPathPrefix('files/'.$request->get('file_toParse'));
         $recognitionData='';
         if (!$filename || !file_exists($filename)) {
             return back()->with('message', 'Your file is Not submitted Successfully');
@@ -58,7 +59,9 @@ class FileController extends Controller
         for ($i=0;$i<count(Excel::toArray(new ProductsImport, $path)[0]);$i++)
         {
             $lines[$i]=Excel::toArray(new ProductsImport, $path)[0][$i];
+            $lines[$i][9]=Prices::whereRaw('? % product',[$lines[$i][2]])->get('pricekzt','pricerur','priceusd');
         }
+        dd($lines);
         return $lines;
     }
     /**

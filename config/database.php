@@ -61,7 +61,7 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => env('DB_HOST', 'isilo.db.elephantsql.com'),
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'kpqkjrcu'),
             'username' => env('DB_USERNAME', 'kpqkjrcu'),
