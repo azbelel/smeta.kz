@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Upload;
 use Maatwebsite\Excel\Facades\Excel;
 use thiagoalessio\TesseractOCR\TesseractOCR;
+use Illuminate\Support\Facades\DB;
 
 
 class FileController extends Controller
@@ -27,7 +28,7 @@ class FileController extends Controller
         ]);
 
 
-        $filename = Storage::disk('public')->getDriver()->getAdapter()->applyPathPrefix('files/'.$request->get('file_toParse'));
+        $filename = Storage::disk('local')->getDriver()->getAdapter()->applyPathPrefix('files/'.$request->get('file_toParse'));
         $recognitionData='';
         if (!$filename || !file_exists($filename)) {
             return back()->with('message', 'Your file is Not submitted Successfully');
@@ -55,14 +56,18 @@ class FileController extends Controller
      */
     private function xlsParse(string $path)
     {
-        $lines=[];
+        $resultLines=[];
+        $excelLines=Excel::toArray(new ProductsImport, $path)[0];
         for ($i=0;$i<count(Excel::toArray(new ProductsImport, $path)[0]);$i++)
         {
-            $lines[$i]=Excel::toArray(new ProductsImport, $path)[0][$i];
-            $lines[$i][9]=Prices::whereRaw('? % product',[$lines[$i][2]])->get('pricekzt','pricerur','priceusd');
+//            $lines[$i]=Excel::toArray(new ProductsImport, $path)[0][$i];
+            $resultLines[$i][0]=$excelLines[$i][1];
+            $resultLines[$i][1]=$excelLines[$i][2];
+            $resultLines[$i][2]=DB::select('select "product","pricekzt","priceusd","pricerur", similarity(?,"product") from prices where ? % "product" and similarity(?,"product")>0.7',
+                [$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2]]);
+//            $lines[$i][9]=Prices::whereRaw('? % product',[$lines[$i][2]])->get('pricekzt','pricerur','priceusd');
         }
-        dd($lines);
-        return $lines;
+        return $resultLines;
     }
     /**
      * PDF Parser function
