@@ -14,15 +14,15 @@
                         <tr>
                             <th>Наименование и техническая характеристика</th>
                             <th>Тип, марка, обозначение документа, опросного листа</th>
+                            <th>Цена</th>
                             <th width="100px">Действие</th>
                         </tr>
                         @foreach($recognitionData as $line)
                             <tr>
-                                <td><a href="" class="update" data-name="name" data-type="text" data-pk="{{ $line[0] }}" data-title="Enter name">{{ $line[0] }}</a></td>
-                                <td><a href="" class="update" data-name="name" data-type="text" data-pk="{{ $line[1] }}" data-title="Enter name">{{ $line[1] }}</a></td>
-{{--                                @foreach($line as $cell)--}}
-
-{{--                                @endforeach--}}
+                                <td><a href="" class="update" data-name="name" data-type="select" data-sour data-pk="{{ $line[0] }}" >{{ $line[0] }}</a></td>
+                                <td><a href="" class="update" data-name="name" data-type="select" data-pk="{{ $line[1] }}" >{{ $line[1] }}</a></td>
+                                <td>{{get_object_vars($line[2][0])['product']}}</td>
+                                <td><div id="price"></div></td>
                                 <td><button class="btn btn-danger btn-sm">Delete</button></td>
                             </tr>
                         @endforeach
@@ -35,19 +35,20 @@
 
 @section('scripts')
     <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+        window.onload=(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('.update').editable({
+                mode:'inline',
+                showbuttons:false,
+                url: '/update-user',
+                source:[
 
-        $('.update').editable({
-            url: '/update-user',
-            type: 'text',
-            pk: 1,
-            name: 'name',
-            title: 'Enter name'
+                ]
+            });
         });
-
     </script>
 @endsection

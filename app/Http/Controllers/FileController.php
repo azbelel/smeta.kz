@@ -104,7 +104,7 @@ class FileController extends Controller
     public function getUsers()
     {
         $users = User::all();
-
+        return view('users',compact('users'));
     }
 
     /**

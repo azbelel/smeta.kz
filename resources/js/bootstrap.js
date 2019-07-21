@@ -43,6 +43,8 @@ if (token) {
  */
 window.Dropzone = require('dropzone');
 Dropzone.autoDiscover = false;
+window.editable=require('X-editable/dist/bootstrap4-editable/js/bootstrap-editable');
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
