@@ -36,6 +36,7 @@ class FileController extends Controller
         elseif (strpos(pathinfo($filename,PATHINFO_EXTENSION),'xls')!==false)
         {
             $recognitionData=$this->xlsParse($filename);
+//            dd($recognitionData);
         }
         elseif (strpos(pathinfo($filename,PATHINFO_EXTENSION),'doc')!==false)
         {
@@ -63,9 +64,23 @@ class FileController extends Controller
 //            $lines[$i]=Excel::toArray(new ProductsImport, $path)[0][$i];
             $resultLines[$i][0]=$excelLines[$i][1];
             $resultLines[$i][1]=$excelLines[$i][2];
-            $resultLines[$i][2]=DB::select('select "product","pricekzt","priceusd","pricerur", similarity(?,"product") from prices where ? % "product" and similarity(?,"product")>0.7',
+            $sameRecords=DB::select('select "product","pricekzt","priceusd","pricerur", similarity(?,"product") from prices where ? % "product" and similarity(?,"product")>0.5 order by similarity desc',
                 [$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2]]);
-//            $lines[$i][9]=Prices::whereRaw('? % product',[$lines[$i][2]])->get('pricekzt','pricerur','priceusd');
+            if(!empty($sameRecords)){
+                $resultLines[$i][2][0]=array('value'=>0,'text'=>$resultLines[$i][0].' '.$resultLines[$i][1]);
+                if(get_object_vars($sameRecords[0])['similarity']==1){
+                    $resultLines[$i][2][0]=array('value'=>0,'text'=>get_object_vars($sameRecords[0])['product'].'|'.get_object_vars($sameRecords[0])['pricekzt'].'|'.get_object_vars($sameRecords[0])['similarity']);
+                }
+                else{
+                    for($j=1;$j<count($sameRecords);$j++){
+                        $resultLines[$i][2][$j]=array('value'=>$j,'text'=>get_object_vars($sameRecords[$j])['product'].'|'.get_object_vars($sameRecords[$j])['pricekzt'].'|'.get_object_vars($sameRecords[$j])['similarity']);
+                    }
+                }
+            }
+            else{
+                $resultLines[$i][2]=null;
+            }
+
         }
         return $resultLines;
     }

@@ -19,9 +19,8 @@
                         </tr>
                         @foreach($recognitionData as $line)
                             <tr>
-                                <td><a href="" class="update" data-name="name" data-type="select" data-sour data-pk="{{ $line[0] }}" >{{ $line[0] }}</a></td>
-                                <td><a href="" class="update" data-name="name" data-type="select" data-pk="{{ $line[1] }}" >{{ $line[1] }}</a></td>
-                                <td>{{get_object_vars($line[2][0])['product']}}</td>
+                                <td><a href="" class="update" data-name="name" data-type="select" @if(!empty($line[2])) data-source="{{json_encode($line[2])}}" @endif  data-pk="{{ $line[0] }}" >{{ $line[0] }}</a></td>
+                                <td><a href="" class="update" data-name="name"  data-type="select" data-pk="{{ $line[1] }}" >{{ $line[1] }}</a></td>
                                 <td><div id="price"></div></td>
                                 <td><button class="btn btn-danger btn-sm">Delete</button></td>
                             </tr>
@@ -44,10 +43,10 @@
             $('.update').editable({
                 mode:'inline',
                 showbuttons:false,
-                url: '/update-user',
-                source:[
-
-                ]
+                // url: '/update-user',
+            });
+            $('.update').on('save', function(e, params) {
+                console.log(params.newValue);
             });
         });
     </script>
