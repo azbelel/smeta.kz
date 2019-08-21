@@ -18,11 +18,11 @@
                             <th width="100px">Действие</th>
                         </tr>
                         @foreach($recognitionData as $line)
-                            <tr>
-                                <td><a href="" class="update" data-name="name" data-type="select" @if(!empty($line[2])) data-source="{{json_encode($line[2])}}" @endif  data-pk="{{ $line[0] }}" >{{ $line[0] }}</a></td>
-                                <td><a href="" class="update" data-name="name"  data-type="select" data-pk="{{ $line[1] }}" >{{ $line[1] }}</a></td>
-                                <td><div id="price"></div></td>
-                                <td><button class="btn btn-danger btn-sm">Delete</button></td>
+                            <tr id="{{'userProductRow_'.$line[0]}}">
+                                <td id="productName"><a href="" class="update" data-name="name" data-type="select" @if(!empty($line[2])) data-source="{{json_encode($line[2])}}" @endif  data-pk="{{ $line[0] }}" >{{ $line[0] }}</a></td>
+                                <td id="productMaker"><a href="" class="update" data-name="name"  data-type="select" data-pk="{{ $line[1] }}" >{{ $line[1] }}</a></td>
+                                <td id="productPrice"></td>
+                                <td id="productRowDelete"><button class="btn btn-danger btn-sm">Delete</button></td>
                             </tr>
                         @endforeach
                     </table>
@@ -44,9 +44,19 @@
                 mode:'inline',
                 showbuttons:false,
                 // url: '/update-user',
+                display: function(value, sourceData) {
+                    if (value) {
+                        $(this).html(sourceData[value].text.substr(0,sourceData[value].text.indexOf('|')));
+                        var newinputbox = document.createElement("input");
+                        newinputbox.setAttribute("type", "text");
+                        newinputbox.setAttribute("class", "form-control text-center");
+                        newinputbox.setAttribute("value", "65464");
+                        this.parentElement.parentElement.childNodes[3].nextSibling.appendChild(newinputbox);
+                        console.log(this.parentElement.parentElement.childNodes[3]);
+                    }
+                }
             });
             $('.update').on('save', function(e, params) {
-                console.log(params.newValue);
             });
         });
     </script>
