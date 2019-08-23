@@ -59,21 +59,23 @@ class FileController extends Controller
     {
         $resultLines=[];
         $excelLines=Excel::toArray(new ProductsImport, $path)[0];
-        for ($i=0;$i<count(Excel::toArray(new ProductsImport, $path)[0]);$i++)
+        for ($i=2;$i<count(Excel::toArray(new ProductsImport, $path)[0]);$i++)
         {
 //            $lines[$i]=Excel::toArray(new ProductsImport, $path)[0][$i];
             $resultLines[$i][0]=$excelLines[$i][1];
             $resultLines[$i][1]=$excelLines[$i][2];
-            $sameRecords=DB::select('select "product","pricekzt","priceusd","pricerur", similarity(?,"product") from prices where ? % "product" and similarity(?,"product")>0.5 order by similarity desc',
+            $sameRecords=DB::select('select "product","type","maker","pricekzt","priceusd","pricerur", similarity(?,"product") from prices where ? % "product" and similarity(?,"product")>0.5 order by similarity desc',
                 [$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2]]);
+//            $sameRecords=Prices::whereRaw('? % product and similarity(?,"product")>0.5', [$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2]])->get();
+//            dd($sameRecords);
             if(!empty($sameRecords)){
                 $resultLines[$i][2][0]=array('value'=>0,'text'=>$resultLines[$i][0].' '.$resultLines[$i][1]);
                 if(get_object_vars($sameRecords[0])['similarity']==1){
-                    $resultLines[$i][2][0]=array('value'=>0,'text'=>get_object_vars($sameRecords[0])['product'].'|'.get_object_vars($sameRecords[0])['pricekzt'].'|'.get_object_vars($sameRecords[0])['similarity']);
+                    $resultLines[$i][2][0]=array('value'=>0,'text'=>get_object_vars($sameRecords[0])['product'].'|'.get_object_vars($sameRecords[0])['type'].'|'.get_object_vars($sameRecords[0])['maker'].'|'.get_object_vars($sameRecords[0])['pricekzt'].'|'.get_object_vars($sameRecords[0])['similarity']);
                 }
                 else{
                     for($j=1;$j<count($sameRecords);$j++){
-                        $resultLines[$i][2][$j]=array('value'=>$j,'text'=>get_object_vars($sameRecords[$j])['product'].'|'.get_object_vars($sameRecords[$j])['pricekzt'].'|'.get_object_vars($sameRecords[$j])['similarity']);
+                        $resultLines[$i][2][$j]=array('value'=>$j,'text'=>get_object_vars($sameRecords[$j])['product'].'|'.get_object_vars($sameRecords[0])['type'].'|'.get_object_vars($sameRecords[0])['maker'].'|'.get_object_vars($sameRecords[$j])['pricekzt'].'|'.get_object_vars($sameRecords[$j])['similarity']);
                     }
                 }
             }
