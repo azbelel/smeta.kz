@@ -12,21 +12,31 @@
                 <div class="row col-md-12">
                     <table class="table table-bordered">
                         <tr>
+                            <th>Позиция</th>
                             <th>Наименование и техническая характеристика</th>
                             <th>Тип, марка, обозначение документа, опросного листа</th>
                             <th>Производитель</th>
-                            <th>Цена</th>
+                            <th>Единица измерения</th>
+                            <th>Количество</th>
+                            <th>Масса единицы</th>
+                            <th>Цена единицы</th>
+                            <th>Сумма</th>
+                            <th>Цена монтажа(единицы)</th>
+                            <th>Сумма за монтаж</th>
+                            <th>Общая сумма</th>
+                            <th>Примечание</th>
                             <th width="100px">Действие</th>
                         </tr>
-                        @foreach($recognitionData as $line)
-                            <tr id="{{'userProductRow_'.$line[0]}}">
-                                <td id="productName"><a href="" class="update" data-name="pName" data-type="select" @if(!empty($line[2])) data-source="{{json_encode($line[2])}}" @endif  data-pk="{{ $line[0] }}" >{{ $line[0] }}</a></td>
-                                <td id="productType"><a href="" class="update" data-name="pType"  data-type="select" data-pk="{{ $line[1] }}" >{{ $line[1] }}</a></td>
+                        @for($i=1;$i<=count($recognitionData);$i++)
+                            <tr id="{{'userProductRow_'.$recognitionData[$i][0]}}">
+                                <td id="productPozition">{{$i}}</td>
+                                <td id="productName"><a href="" class="update" data-name="pName" data-type="select" @if(!empty($recognitionData[$i][2])) data-source="{{json_encode($recognitionData[$i][2])}}" @endif  data-pk="{{ $recognitionData[$i][0] }}" >{{ $recognitionData[$i][0] }}</a></td>
+                                <td id="productType"><input type="text" class="form-control text-center" value=""></td>
                                 <td id="productMaker"><input type="text" class="form-control text-center" value=""></td>
                                 <td id="productPrice"><input type="text" class="form-control text-center" value=""></td>
                                 <td class="text-center" id="productRowDelete"><button class="btn btn-danger btn-sm">Delete</button></td>
                             </tr>
-                        @endforeach
+                        @endfor
                     </table>
                 </div>
             </div>
@@ -49,20 +59,27 @@
                 display: function(value, sourceData) {
                     if (value) {
                         $(this).html(sourceData[value].text.substr(0,sourceData[value].text.indexOf('|')));
+
+                        var selectedType = document.createElement("input");
+                        selectedType.setAttribute("type","text");
+                        selectedType.setAttribute("class","form-control text-left");
                         var typeText=sourceData[value].text.substr(sourceData[value].text.indexOf('|')+1,sourceData[value].text.lastIndexOf('|')-(sourceData[value].text.indexOf('|')+1));
+                        typeText=typeText.substr(0,typeText.indexOf('|'));
+                        selectedType.setAttribute("value",typeText.toString());
+                        this.parentElement.parentElement.childNodes[4].childNodes[0].replaceWith(selectedType);
+
                         var selectedMaker = document.createElement("input");
                         selectedMaker.setAttribute("type","text");
                         selectedMaker.setAttribute("class","form-control text-left");
                         var makerText=typeText.substr(0,typeText.indexOf('|'));
-                        makerText=makerText.substr(0,makerText.indexOf('|'));
-
                         selectedMaker.setAttribute("value",makerText.toString());
-                        this.parentElement.parentElement.childNodes[4].childNodes[0].replaceWith(selectedMaker);
+                        this.parentElement.parentElement.childNodes[6].childNodes[0].replaceWith(selectedMaker);
+
                         var selectedPrice= document.createElement("input");
                         selectedPrice.setAttribute("type","text");
                         selectedPrice.setAttribute("class","form-control text-center");
                         selectedPrice.setAttribute("value",sourceData[value].text.substr(sourceData[value].text.indexOf('|')+1,sourceData[value].text.lastIndexOf('|')-(sourceData[value].text.indexOf('|')+1)));
-                        this.parentElement.parentElement.childNodes[5].nextSibling.childNodes[0].replaceWith(selectedPrice);
+                        this.parentElement.parentElement.childNodes[8].nextSibling.childNodes[0].replaceWith(selectedPrice);
 
 
                     }
