@@ -52,6 +52,7 @@ class FileController extends Controller
         return view('table_corrector',compact('recognitionData'));
         return back()->with('message', 'Your file is submitted Successfully');
     }
+
     /**
      * XLS Parser function
      */
@@ -64,28 +65,64 @@ class FileController extends Controller
 //            $lines[$i]=Excel::toArray(new ProductsImport, $path)[0][$i];
             $resultLines[$i][0]=$excelLines[$i][1];
             $resultLines[$i][1]=$excelLines[$i][2];
-            $sameRecords=DB::select('select "product","type","maker","pricekzt","priceusd","pricerur", similarity(?,concat(\' \',"product","type")) from prices where ? % concat(\' \',"product","type") and similarity(?,concat(\' \',"product","type"))>0.5 order by similarity desc',
-                [$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2]]);
-//            $sameRecords=Prices::whereRaw('? % product and similarity(?,"product")>0.5', [$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2]])->get();
-//            dd($sameRecords);
+            if(!empty($excelLines[$i][1])&&!empty($excelLines[$i][2])&&!empty($excelLines[$i][3]))
+            {
+                $sameRecords=DB::select("select product,type,maker,pricekzt,priceusd,pricerur,similarity(?,concat(product,' ',type,' ',maker)) from prices where similarity(?,concat(product,' ',type,' ',maker))>0.2 order by similarity desc",
+                    [$excelLines[$i][1]." ".$excelLines[$i][2]." ".$excelLines[$i][3],$excelLines[$i][1]." ".$excelLines[$i][2]." ".$excelLines[$i][3]]);
+            }
+            elseif (!empty($excelLines[$i][1])&&!empty($excelLines[$i][2])&&empty($excelLines[$i][3]))
+            {
+                $sameRecords=DB::select("select product,type,maker,pricekzt,priceusd,pricerur,similarity(?,concat(product,' ',type)) from prices where similarity(?,concat(product,' ',type))>0.2 order by similarity desc",
+                    [$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2]]);
+            }
+            elseif (!empty($excelLines[$i][1])&&empty($excelLines[$i][2])&&!empty($excelLines[$i][3]))
+            {
+                $sameRecords=DB::select("select product,type,maker,pricekzt,priceusd,pricerur,similarity(?,concat(product,' ',maker)) from prices where similarity(?,concat(product,' ',maker))>0.2 order by similarity desc",
+                    [$excelLines[$i][1]." ".$excelLines[$i][3],$excelLines[$i][1]." ".$excelLines[$i][3]]);
+            }
+            elseif (!empty($excelLines[$i][1])&&empty($excelLines[$i][2])&&empty($excelLines[$i][3]))
+            {
+                $sameRecords=DB::select("select product,type,maker,pricekzt,priceusd,pricerur,similarity(?,product) from prices where similarity(?,product)>0.2 order by similarity desc",
+                    [$excelLines[$i][1],$excelLines[$i][1]]);
+            }
+            elseif (empty($excelLines[$i][1])&&empty($excelLines[$i][2])&&empty($excelLines[$i][3]))
+            {
+                continue;
+            }
             if(!empty($sameRecords)){
                 $resultLines[$i][2][0]=array('value'=>0,'text'=>$resultLines[$i][0].' '.$resultLines[$i][1]);
                 if(get_object_vars($sameRecords[0])['similarity']==1){
-                    $resultLines[$i][2][0]=array('value'=>0,'text'=>get_object_vars($sameRecords[0])['product'].'|'.get_object_vars($sameRecords[0])['type'].'|'.get_object_vars($sameRecords[0])['maker'].'|'.get_object_vars($sameRecords[0])['pricekzt'].'|'.get_object_vars($sameRecords[0])['similarity']);
+                    $resultLines[$i][2][0]=array('value'=>0,'text'=>get_object_vars($sameRecords[0])['product'].'|'.get_object_vars($sameRecords[0])['type'].'|'.get_object_vars($sameRecords[0])['maker'].'|'.get_object_vars($sameRecords[0])['pricekzt'].'|'.number_format((float)get_object_vars($sameRecords[0])['similarity'],2));
                 }
                 else{
                     for($j=0;$j<count($sameRecords);$j++){
-                        $resultLines[$i][2][$j]=array('value'=>$j,'text'=>get_object_vars($sameRecords[$j])['product'].'|'.get_object_vars($sameRecords[0])['type'].'|'.get_object_vars($sameRecords[0])['maker'].'|'.get_object_vars($sameRecords[$j])['pricekzt'].'|'.get_object_vars($sameRecords[$j])['similarity']);
+                        $resultLines[$i][2][$j]=array('value'=>$j,'text'=>get_object_vars($sameRecords[$j])['product'].'|'.get_object_vars($sameRecords[0])['type'].'|'.get_object_vars($sameRecords[0])['maker'].'|'.get_object_vars($sameRecords[$j])['pricekzt'].'|'.number_format((float)get_object_vars($sameRecords[$j])['similarity'],2));
                     }
                 }
             }
             else{
                 $resultLines[$i][2]=null;
             }
-
+            $resultLines[$i][3]=$excelLines[$i][4];
+            $resultLines[$i][4]=$excelLines[$i][5];
         }
         return $resultLines;
     }
+    /**
+     * XLS Parser function with Model
+     */
+    private function xlsParseModel(string $path)
+    {
+        $excelLines=Excel::toArray(new ProductsImport, $path)[0];
+        for($i=0;$i<count($excelLines);$i++)
+        {
+            $sameRecords=Prices::whereRaw("similarity(?, concat(product,' ',type,' ',maker))>0.5", [$excelLines[$i][1]." ".$excelLines[$i][2]])->get();
+        }
+
+        dd($sameRecords);
+    }
+
+
     /**
      * PDF Parser function
      */

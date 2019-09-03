@@ -33,8 +33,8 @@
                                 <td id="productName"><a href="" class="update" data-name="pName" data-type="select" @if(!empty($recognitionData[$i][2])) data-source="{{json_encode($recognitionData[$i][2])}}" @endif  data-pk="{{ $recognitionData[$i][0] }}" >{{ $recognitionData[$i][0] }}</a></td>
                                 <td id="productType"><input type="text" class="form-control text-center" value=""></td>
                                 <td id="productMaker"><input type="text" class="form-control text-center" value=""></td>
-                                <td id="productUnit"><input type="text" class="form-control text-center" value=""></td>
-                                <td id="productAmount"><input type="text" class="form-control text-center" value=""></td>
+                                <td id="productUnit"><input type="text" class="form-control text-center" value="{{$recognitionData[$i][3]}}"></td>
+                                <td id="productAmount"><input type="text" class="form-control text-center" value="{{$recognitionData[$i][4]}}"></td>
                                 <td id="productUnitWeight"><input type="text" class="form-control text-center" value=""></td>
                                 <td id="productPrice"><input type="text" class="form-control text-center" value=""></td>
                                 <td id="productSumm"><input type="text" class="form-control text-center" value=""></td>
@@ -66,6 +66,9 @@
                 // url: '/update-user',
                 display: function(value, sourceData) {
                     if (value) {
+                        if($(this).html(sourceData[value].text.split('|')[4])==='1.00'){
+                            $(this).attr('selected');
+                        }
                         $(this).html(sourceData[value].text.split('|')[0]);
                         this.parentElement.parentElement.children[2].children[0].value=sourceData[value].text.split('|')[1];
                         this.parentElement.parentElement.children[3].children[0].value=sourceData[value].text.split('|')[2];
@@ -75,6 +78,12 @@
                 width:350
             });
             $('.update').on('save', function(e, params) {
+            });
+            $('td#productAmount').find('input').on('change',function () {
+                this.parentElement.parentElement.children[8].children[0].value= this.parentElement.parentElement.children[5].children[0].value* this.parentElement.parentElement.children[7].children[0].value;
+            });
+            $('td#productPrice').find('input').on('change',function () {
+                this.parentElement.parentElement.children[8].children[0].value= this.parentElement.parentElement.children[5].children[0].value* this.parentElement.parentElement.children[7].children[0].value;
             });
         });
     </script>
