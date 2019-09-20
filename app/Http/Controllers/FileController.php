@@ -89,8 +89,9 @@ class FileController extends Controller
             else{
                 $resultLines[$i][2]=null;
             }
-            $resultLines[$i][3]=$excelLines[$i][4];
-            $resultLines[$i][4]=$excelLines[$i][5];
+            $resultLines[$i][3]=$excelLines[$i][3];
+            $resultLines[$i][4]=$excelLines[$i][4];
+            $resultLines[$i][5]=$excelLines[$i][5];
         }
         return $resultLines;
     }
