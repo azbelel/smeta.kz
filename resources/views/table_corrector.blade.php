@@ -37,7 +37,7 @@
                                 <td id="productAmount"><input type="text" class="form-control text-center" value="{{$recognitionData[$i][4]}}"></td>
                                 <td id="productUnitWeight"><input type="text" class="form-control text-center" value=""></td>
                                 <td id="productPrice"><input type="text" class="form-control text-center" value=""></td>
-                                <td id="productSumm"><input type="text" class="form-control text-center" value=""></td>
+                                <td id="productSumm"><input type="text" class="form-control text-center" value="{{$recognitionData[$i][4]}}" readonly></td>
                                 <td id="productInstallPrice"><input type="text" class="form-control text-center" value=""></td>
                                 <td id="productInstallSumm"><input type="text" class="form-control text-center" value=""></td>
                                 <td id="productAllSumm"><input type="text" class="form-control text-center" value=""></td>
@@ -78,13 +78,17 @@
                 width:350
             });
             $('.update').on('save', function(e, params) {
+                $(this.parentElement.parentElement.children[8].children[0]).val(this.parentElement.parentElement.children[5].children[0].value*JSON.parse($(this).find(':selected').prevObject[0].dataset.source)[params.newValue].text.split('|')[3]);
+                //this.parentElement.parentElement.children[8].children[0].value=this.parentElement.parentElement.children[5].children[0].value* this.parentElement.parentElement.children[7].children[0].value;
             });
             $('td#productAmount').find('input').on('change',function () {
-                this.parentElement.parentElement.children[8].children[0].value= this.parentElement.parentElement.children[5].children[0].value* this.parentElement.parentElement.children[7].children[0].value;
+                this.parentElement.parentElement.children[8].children[0].value= this.parentElement.parentElement.children[5].children[0].value * this.parentElement.parentElement.children[7].children[0].value;
             });
             $('td#productPrice').find('input').on('change',function () {
-                this.parentElement.parentElement.children[8].children[0].value= this.parentElement.parentElement.children[5].children[0].value* this.parentElement.parentElement.children[7].children[0].value;
+                this.parentElement.parentElement.children[8].children[0].value= this.parentElement.parentElement.children[5].children[0].value * this.parentElement.parentElement.children[7].children[0].value;
             });
+
         });
+
     </script>
 @endsection

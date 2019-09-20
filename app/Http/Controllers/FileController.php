@@ -65,29 +65,15 @@ class FileController extends Controller
 //            $lines[$i]=Excel::toArray(new ProductsImport, $path)[0][$i];
             $resultLines[$i][0]=$excelLines[$i][1];
             $resultLines[$i][1]=$excelLines[$i][2];
-            if(!empty($excelLines[$i][1])&&!empty($excelLines[$i][2])&&!empty($excelLines[$i][3]))
+            if(!empty($excelLines[$i][3]))
             {
                 $sameRecords=DB::select("select product,type,maker,pricekzt,priceusd,pricerur,similarity(?,concat(product,' ',type,' ',maker)) from prices where similarity(?,concat(product,' ',type,' ',maker))>0.2 order by similarity desc",
                     [$excelLines[$i][1]." ".$excelLines[$i][2]." ".$excelLines[$i][3],$excelLines[$i][1]." ".$excelLines[$i][2]." ".$excelLines[$i][3]]);
             }
-            elseif (!empty($excelLines[$i][1])&&!empty($excelLines[$i][2])&&empty($excelLines[$i][3]))
+            else
             {
                 $sameRecords=DB::select("select product,type,maker,pricekzt,priceusd,pricerur,similarity(?,concat(product,' ',type)) from prices where similarity(?,concat(product,' ',type))>0.2 order by similarity desc",
                     [$excelLines[$i][1]." ".$excelLines[$i][2],$excelLines[$i][1]." ".$excelLines[$i][2]]);
-            }
-            elseif (!empty($excelLines[$i][1])&&empty($excelLines[$i][2])&&!empty($excelLines[$i][3]))
-            {
-                $sameRecords=DB::select("select product,type,maker,pricekzt,priceusd,pricerur,similarity(?,concat(product,' ',maker)) from prices where similarity(?,concat(product,' ',maker))>0.2 order by similarity desc",
-                    [$excelLines[$i][1]." ".$excelLines[$i][3],$excelLines[$i][1]." ".$excelLines[$i][3]]);
-            }
-            elseif (!empty($excelLines[$i][1])&&empty($excelLines[$i][2])&&empty($excelLines[$i][3]))
-            {
-                $sameRecords=DB::select("select product,type,maker,pricekzt,priceusd,pricerur,similarity(?,product) from prices where similarity(?,product)>0.2 order by similarity desc",
-                    [$excelLines[$i][1],$excelLines[$i][1]]);
-            }
-            elseif (empty($excelLines[$i][1])&&empty($excelLines[$i][2])&&empty($excelLines[$i][3]))
-            {
-                continue;
             }
             if(!empty($sameRecords)){
                 $resultLines[$i][2][0]=array('value'=>0,'text'=>$resultLines[$i][0].' '.$resultLines[$i][1]);
